@@ -1,149 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Lector de Números Avanzado</title>
-  <style>
-    :root {
-      --color-entero: #673ab7;
-      --color-decimal: #1976d2;
-      --color-etiqueta: #388e3c;
-      --color-coma: #d32f2f;
-      --color-fondo: #fff9c4;
-      --color-highlight: #f44336;
-    }
-
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f5f7; padding: 20px 40px 40px; text-align: center; color: #172b4d; }
-    .seccion { background-color: white; padding: 30px 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto; overflow-x: auto; }
-    h1, h2 { font-weight: 600; margin-top: 0; margin-bottom: 20px; }
-    h1 { font-size: 2.2em; }
-    h2 { font-size: 1.8em; color: #0052cc; }
-    p.descripcion { font-size: 1.1em; color: #5e6c84; margin-top: -10px; margin-bottom: 25px; }
-    input { font-size: 1.5em; padding: 12px; width: 90%; text-align: center; margin-bottom: 15px; border: 2px solid #dfe1e6; border-radius: 4px; transition: all 0.2s; }
-    input:focus { border-color: #4c9aff; box-shadow: 0 0 0 3px rgba(76, 154, 255, 0.25); outline: none; }
-    .resultado-texto, #aprendizaje-fonetico-resultado, #aprendizaje-formal-wrapper { min-height: 2.5em; padding: 20px; word-wrap: break-word; border-radius: 5px; background-color: #fafbfc; border: 1px solid #dfe1e6; display: flex; justify-content: center; align-items: center; }
-    .resultado-texto { font-size: 1.5em; margin-bottom: 20px; }
-    #aprendizaje-fonetico-resultado { font-size: 1.8em; line-height: 1.8; margin-bottom: 25px; flex-wrap: wrap; }
-    .palabra-fonetica { display: inline-block; margin: 0 0.3em; transition: all 0.2s; cursor: default; }
-    .palabra-fonetica.highlight { transform: translateY(-8px) scale(1.08); color: var(--color-highlight); font-weight: 700; }
-    
-    #aprendizaje-formal-wrapper { min-height: 300px; padding: 10px; }
-    #aprendizaje-formal-svg { width: 100%; height: auto; max-width: 100%; }
-
-    .svg-numero { font-size: 72px; font-weight: bold; }
-    .svg-etiqueta-principal { font-size: 28px; font-weight: bold; fill: var(--color-entero); }
-    .svg-etiqueta-vertical { font-size: 22px; font-weight: bold; text-anchor: middle; writing-mode: vertical-rl; fill: var(--color-etiqueta); }
-    
-    /* Karaoke en SVG */
-    #svg-entero-texto.highlight, #svg-decimales-g .svg-numero.highlight { fill: var(--color-highlight) !important; }
-    #svg-etiquetas-g.highlight .svg-etiqueta-vertical { fill: var(--color-highlight) !important; }
-
-    .placeholder-text { color: #8993a4; font-style: italic; font-weight: 400; font-size: 1rem !important; }
-    button { padding: 12px 25px; font-size: 1.1em; font-weight: 500; cursor: pointer; color: white; border: none; border-radius: 4px; transition: background-color 0.2s; margin-top: 15px; }
-    .btn-normal { background-color: #5e6c84; } .btn-normal:hover { background-color: #42526e; }
-    .btn-aprendizaje { background-color: #0065ff; } .btn-aprendizaje:hover { background-color: #0052cc; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lector de Números</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="seccion"><h1>Lector de Números</h1><input type="text" id="numero" placeholder="Escribe un número"><div class="resultado-texto" id="resultado"><span class="placeholder-text">La lectura del número aparecerá aquí.</span></div><button onclick="leerEnVozNormal()" class="btn-normal">🔊 Leer en voz</button></div>
-    <div class="seccion"><h2>Modo Aprendizaje Fonético</h2><div id="aprendizaje-fonetico-resultado"><span class="placeholder-text">Desglose fonético...</span></div><button onclick="iniciarAprendizajeFonetico()" class="btn-aprendizaje">🎤 Iniciar Fonética</button></div>
-    <div class="seccion"><h2>Modo Aprendizaje Formal</h2><div id="aprendizaje-formal-wrapper"><span class="placeholder-text">Representación gráfica...</span></div><button onclick="iniciarAprendizajeFormal()" class="btn-aprendizaje">🎓 Iniciar Formal</button></div>
+    <div class="container">
+        <header>
+            <h1>Lector de Números</h1>
+            <p>Introduce un número (con o sin decimales) y explora sus diferentes lecturas.</p>
+        </header>
 
-  <script>
-    const unidades=["","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve"], especiales=["diez","once","doce","trece","catorce","quince"], decenas=["","","veinte","treinta","cuarenta","cincuenta","sesenta","setenta","ochenta","noventa"], centenas=["","cien","doscientos","trescientos","cuatrocientos","quinientos","seiscientos","setecientos","ochocientos","novecientos"];
-    const decimalPlaces=["", "DÉCIMOS","CENTÉSIMOS","MILÉSIMOS","DIEZMILÉSIMOS","CIENMILÉSIMOS","MILLONÉS_IMOS"];
-    function numeroALetras(n){if(isNaN(n)||n===null)return"";if(n===0)return"cero";if(n<0)return"menos "+numeroALetras(Math.abs(n));let t="";if(n>=1e6){const o=Math.floor(n/1e6);t+=(1===o?"un millón":numeroALetras(o)+" millones"),n%=1e6,n>0&&(t+=" ")}if(n>=1e3){const o=Math.floor(n/1e3);1===o?t+="mil":(e=numeroALetras(o),e.endsWith("uno")&&(e=e.slice(0,-1)+"ún"),t+=e+" mil"),n%=1e3,n>0&&(t+=" ")}var e;if(n>=100){const o=Math.floor(n/100);t+=1===o&&n%100>0?"ciento":centenas[o],n%=100,n>0&&(t+=" ")}if(n>0)if(n>=10&&n<=15)t+=especiales[n-10];else if(n>=16&&n<=19)t+="dieci"+unidades[n-10];else if(20===n)t+="veinte";else if(n>20&&n<30)t+="veinti"+unidades[n-20];else if(n>=30){const o=Math.floor(n/10);t+=decenas[o],(n%=10)>0&&(t+=" y "+unidades[n])}else t+=unidades[n];return t.trim()}
-    function formalDecimalesALetras(d){if(!d)return{texto:"",unidad:""};const n=parseInt(d,10),l=d.length;let t=numeroALetras(n),u=decimalPlaces[l]?decimalPlaces[l].toLowerCase().replace("_",""):"";return 1===n&&u.endsWith("s")&&(u=u.slice(0,-1)),{texto:t,unidad:u}}
-    function simpleDecimalesALetras(d) { return d.split('').map(c => unidades[parseInt(c, 10)]).join(' '); }
-    function silabear(p){p=p.toLowerCase().trim();if(p.length<=3)return[p];p=p.replace(/y/g,"i");let s=[],i=0;while(i<p.length){let t=i;while(t<p.length&&!/[aeiouáéíóú]/.test(p[t]))t++;while(t<p.length&&/[aeiouáéíóú]/.test(p[t]))t++;let c=t;if(t<p.length-1){const e=p.substring(t).match(/^[^aeiouáéíóú]+/);if(e){const n=e[0];if(1===n.length||2===n.length&&/^(ll|rr|ch|[bcdfghprt]l|[bcdfghprt]r)$/.test(n))c=t;else n.length>=2&&(c=t+1)}}else c=p.length;s.push(p.substring(i,c)),i=c}return s.filter(Boolean)}
+        <div class="input-section">
+            <label for="numero">Introduce el número:</label>
+            <input type="text" id="numero" placeholder="Ej: 1234,56" autocomplete="off">
+        </div>
 
-    const input=document.getElementById("numero"),resultadoDiv=document.getElementById("resultado"),foneticoDiv=document.getElementById("aprendizaje-fonetico-resultado"),formalWrapper=document.getElementById("aprendizaje-formal-wrapper");
-    let textoSimple="",textoFormal="",enteroTxt="",decimalTxt="",unidadTxt="";
-    const placeholderSimple='<span class="placeholder-text">La lectura del número aparecerá aquí.</span>',placeholderFonetico='<span class="placeholder-text">Desglose fonético...</span>',placeholderFormal='<span class="placeholder-text">Representación gráfica...</span>';
-    
-    input.addEventListener("input", () => {
-        let val=input.value.replace(/[^0-9,]/g,'').replace(/,/g,(m,o,s)=>o===s.indexOf(',')?',':'');
-        if(input.value!==val)input.value=val;
-        
-        [textoSimple,textoFormal,enteroTxt,decimalTxt,unidadTxt]=["","","","",""];
-        resultadoDiv.innerHTML=placeholderSimple;foneticoDiv.innerHTML=placeholderFonetico;formalWrapper.innerHTML=placeholderFormal;
-        if(!val)return;
+        <div class="card">
+            <h2>Lectura Simple</h2>
+            <div id="resultado" class="result-box">
+                <span class="placeholder-text">La lectura del número aparecerá aquí.</span>
+            </div>
+            <button id="play-simple-btn" class="play-btn">▶️ Escuchar</button>
+        </div>
 
-        const partes=val.split(','),pEnteraStr=partes[0]||'0',pDecimalStr=partes[1]||'',pEnteraNum=parseInt(pEnteraStr,10);
-        enteroTxt=numeroALetras(pEnteraNum);
-        
-        // --- 1. LECTURA SIMPLE
-        textoSimple=enteroTxt+(pDecimalStr?" coma "+simpleDecimalesALetras(pDecimalStr):"");
-        resultadoDiv.textContent=textoSimple.charAt(0).toUpperCase()+textoSimple.slice(1);
+        <div class="card">
+            <h2>Modo de Aprendizaje Fonético</h2>
+            <div id="aprendizaje-fonetico-resultado" class="result-box phonetic-box">
+                 <span class="placeholder-text">Desglose fonético...</span>
+            </div>
+            <button id="play-phonetic-btn" class="play-btn">▶️ Escuchar y Resaltar</button>
+        </div>
 
-        // --- 2. LECTURA FORMAL
-        const{texto,unidad}=formalDecimalesALetras(pDecimalStr);decimalTxt=texto;unidadTxt=unidad;
-        let fraseEntera=pEnteraNum===1&&pEnteraStr.length===1?"un entero":`${enteroTxt} enteros`;
-        if(pEnteraStr==="0"&&pDecimalStr.length>0)fraseEntera="cero enteros";
-        textoFormal=decimalTxt?`${fraseEntera} y ${decimalTxt} ${unidadTxt}`:enteroTxt;
-        if(!val.includes(','))textoFormal=enteroTxt;
+        <div class="card">
+            <h2>Modo de Aprendizaje Formal (Gráfico)</h2>
+            <div id="aprendizaje-formal-wrapper" class="result-box svg-box">
+                 <span class="placeholder-text">Representación gráfica...</span>
+            </div>
+            <button id="play-formal-btn" class="play-btn">▶️ Escuchar y Resaltar</button>
+        </div>
+    </div>
 
-        // --- 3. ACTUALIZAR APRENDIZAJES
-        foneticoDiv.innerHTML='';
-        textoSimple.split(/\s+/).filter(Boolean).forEach((palabra,index)=>{const span=document.createElement('span');span.className='palabra-fonetica';let silabas=silabear(palabra).join('-');span.textContent=(index===0)?silabas.charAt(0).toUpperCase()+silabas.slice(1):silabas;foneticoDiv.appendChild(span)});
-        renderizarSVGFormal(pEnteraStr, pDecimalStr);
-    });
-    
-    function renderizarSVGFormal(pEnteraStr, pDecimalStr) {
-        formalWrapper.innerHTML = '';
-        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        formalWrapper.appendChild(svg);
-
-        const digitWidth = 55, startX = 20, numY = 200, labelY = 110, fontSize = 72;
-        let currentX = startX;
-
-        // "PARTE ENTERA" Label
-        svg.innerHTML += `<text x="${currentX + (pEnteraStr.length * digitWidth / 2) - 30}" y="140" class="svg-etiqueta-principal">PARTE ENTERA</text>`;
-
-        // Entero
-        svg.innerHTML += `<rect x="${currentX-5}" y="${numY - fontSize + 10}" width="${pEnteraStr.length * (digitWidth - 15) + 10}" height="${fontSize}" fill="var(--color-fondo)" />`;
-        svg.innerHTML += `<text id="svg-entero-texto" x="${currentX}" y="${numY}" class="svg-numero" style="fill: var(--color-entero)">${pEnteraStr}</text>`;
-        currentX += pEnteraStr.length * (digitWidth-15) + 20;
-
-        if (pEnteraStr && pDecimalStr) {
-            svg.innerHTML += `<text x="${currentX-5}" y="${numY -10}" class="svg-numero" style="fill: var(--color-coma)">,</text>`;
-            currentX += 20;
-        }
-
-        // Decimales
-        const gDecimales = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        gDecimales.id = "svg-decimales-g";
-        const gEtiquetas = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        gEtiquetas.id = "svg-etiquetas-g";
-
-        svg.appendChild(gDecimales);
-        svg.appendChild(gEtiquetas);
-        
-        let startDecimalX = currentX;
-        pDecimalStr.split('').forEach((digit, index) => {
-            if (index < decimalPlaces.length-1) {
-                // Background & Number
-                gDecimales.innerHTML += `<rect x="${currentX-5}" y="${numY - fontSize + 10}" width="${digitWidth}" height="${fontSize}" fill="var(--color-fondo)" />`;
-                gDecimales.innerHTML += `<text x="${currentX + 5}" y="${numY}" class="svg-numero" style="fill: var(--color-decimal)">${digit}</text>`;
-                
-                // Vertical Line & Label
-                gEtiquetas.innerHTML += `<line x1="${currentX + digitWidth - 5}" y1="50" x2="${currentX + digitWidth - 5}" y2="280" stroke="#ccc" stroke-dasharray="5,5" />`;
-                gEtiquetas.innerHTML += `<text x="${currentX + digitWidth / 2}" y="${labelY}" class="svg-etiqueta-vertical" transform="rotate(-90 ${currentX + digitWidth / 2},${labelY})">${decimalPlaces[index+1].replace("_", "")}</text>`;
-                
-                currentX += digitWidth;
-            }
-        });
-
-        // Main vertical line
-        gEtiquetas.innerHTML += `<line x1="${startDecimalX - 18}" y1="50" x2="${startDecimalX - 18}" y2="280" stroke="var(--color-entero)" stroke-width="3" stroke-dasharray="8,4" />`;
-
-        svg.setAttribute('viewBox', `0 0 ${currentX + 20} 300`);
-    }
-
-    function leerEnVoz(texto){if(!texto){alert("Escribe un número.");return}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(texto);u.lang='es-ES';speechSynthesis.speak(u)}
-    function leerEnVozNormal(){leerEnVoz(textoSimple)}
-    function iniciarAprendizajeFonetico(){if(!textoSimple)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(textoSimple);u.lang='es-ES';const s=document.querySelectorAll('.palabra-fonetica');let i=0;u.onboundary=e=>{if(e.name==='word'){s.forEach(t=>t.classList.remove('highlight'));s[i]&&s[i].classList.add('highlight');i++}};u.onend=()=>s.forEach(t=>t.classList.remove('highlight'));speechSynthesis.speak(u)}
-    function iniciarAprendizajeFormal(){if(!textoFormal)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(textoFormal);u.lang='es-ES';const enteroSVG=document.getElementById('svg-entero-texto'),decimalSVG=document.getElementById('svg-decimales-g'),etiquetaSVG=document.getElementById('svg-etiquetas-g');u.onboundary=e=>{const t=textoFormal.substring(0,e.charIndex+e.charLength);[enteroSVG,decimalSVG,etiquetaSVG].forEach(el=>el&&el.classList.remove('highlight'));decimalSVG&&Array.from(decimalSVG.children).forEach(el=>el.classList.remove('highlight'));if(enteroSVG&&t.includes(enteroTxt))enteroSVG.classList.add('highlight');if(decimalSVG&&decimalTxt&&t.includes(decimalTxt)){decimalSVG.querySelectorAll('text').forEach(el=>el.classList.add('highlight'))}if(etiquetaSVG&&unidadTxt&&t.includes(unidadTxt)){decimalSVG.querySelectorAll('text').forEach(el=>el.classList.remove('highlight'));etiquetaSVG.classList.add('highlight')}};u.onend=()=>{[enteroSVG,decimalSVG,etiquetaSVG].forEach(el=>el&&el.classList.remove('highlight'))};speechSynthesis.speak(u)}
-  </script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
