@@ -1,134 +1,280 @@
+/* --- Variables de Diseño Profesionales y Elegantes --- */
 :root {
-    --color-fondo: #f4f7f9;
-    --color-texto: #333;
-    --color-principal: #007bff;
-    --color-blanco: #ffffff;
-    --color-sombra: rgba(0, 0, 0, 0.1);
-    --color-borde: #e0e0e0;
-    --color-placeholder: #888;
-    --color-entero: #2a9d8f;
-    --color-decimal: #e76f51;
-    --color-coma: #e9c46a;
-    --color-highlight: #fca311;
+    /* Colores Base */
+    --color-fondo: #F0F2F5; /* Fondo gris claro y fresco, casi blanco */
+    --color-fondo-secundario: #E8ECF1; /* Fondo para cajas de resultados, ligeramente más oscuro y con un toque azul-gris */
+    --color-blanco: #FFFFFF; /* Blanco puro para elementos principales */
+
+    /* Colores de Texto */
+    --color-texto: #2C3E50; /* Texto principal azul oscuro, muy legible (Midnight Blue) */
+    --color-texto-secundario: #6C7A89; /* Texto para descripciones, placeholders y etiquetas menos prominentes (Cadet Grey) */
+    --color-placeholder: #9BA8B5; /* Color de placeholder suave y legible (Light Slate Grey) */
+
+    /* Colores de Marca y Acceso (Azules, Modernos y Fiables) */
+    --color-principal: #34495E; /* Azul grisáceo oscuro, profesional y versátil (Wet Asphalt) */
+    --color-principal-dark: #2C3E50; /* Versión más oscura para estados interactivos (Midnight Blue) */
+    --color-principal-light: rgba(52, 73, 94, 0.15); /* Versión clara para sombras de foco, con transparencia */
+
+    /* Colores para Partes del Número (Educativo y Sutilmente Distintivo) */
+    --color-entero: #27AE60; /* Verde esmeralda profundo para la parte entera */
+    --color-decimal: #C0392B; /* Rojo granate sutil para la parte decimal */
+    --color-coma: #E67E22; /* Naranja quemado/óxido para destacar la coma */
+
+    /* Colores para Resaltado y Bordes/Sombras */
+    --color-highlight: #F39C12; /* Naranja ámbar vibrante para el resaltado interactivo */
+    --color-borde: #D3DCE6; /* Borde gris suave y moderno */
+    --color-borde-claro: #E9EEF3; /* Borde muy sutil para tarjetas y secciones */
+    --color-sombra: rgba(0, 0, 0, 0.06); /* Sombra muy ligera para añadir profundidad sutil */
+    --color-sombra-fuerte: rgba(0, 0, 0, 0.12); /* Sombra más pronunciada para estados de hover */
+
+    /* Variables específicas para el diseño SVG (líneas) */
+    --color-linea-entera: var(--color-entero); /* Línea gruesa verde junto al entero */
+    --color-linea-decimal: var(--color-borde); /* Líneas delgadas grises entre decimales */
+    --color-highlight-line: var(--color-highlight); /* Color de línea al resaltar */
+}
+
+/* --- Estilos Generales y Reseteo Suave --- */
+* {
+    box-sizing: border-box; /* Asegura que padding y border no aumenten el tamaño del elemento */
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif; /* Fuente principal para la mayoría del texto */
     background-color: var(--color-fondo);
     color: var(--color-texto);
     margin: 0;
-    padding: 2rem;
+    padding: 2.5rem; /* Un poco más de padding general */
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: flex-start; /* Alinea el contenido desde la parte superior */
+    min-height: 100vh; /* Asegura que el body ocupe al menos la altura de la ventana */
+    line-height: 1.6; /* Mejora la legibilidad del texto con mayor espaciado entre líneas */
+    font-size: 16px; /* Tamaño de fuente base para consistencia */
+    -webkit-font-smoothing: antialiased; /* Mejora el suavizado de la fuente en navegadores WebKit (Chrome, Safari) */
+    -moz-osx-font-smoothing: grayscale; /* Mejora el suavizado de la fuente en Firefox (Mozilla) */
 }
 
+/* Contenedor Principal de la Aplicación */
 .container {
-    max-width: 800px;
+    max-width: 900px; /* Un poco más ancho para diseños más espaciosos */
     width: 100%;
+    display: flex; /* Utiliza Flexbox para organizar las secciones verticalmente */
+    flex-direction: column;
+    gap: 1.75rem; /* Espacio uniforme entre cada sección (header, input, cards) */
 }
 
+/* --- Estilos del Encabezado (Header) --- */
 header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 2rem; /* Margen inferior para separar del contenido siguiente */
+    padding: 2rem 0; /* Un poco más de padding vertical para dar aire al título */
 }
 
 header h1 {
-    font-family: 'Roboto', sans-serif;
-    color: var(--color-principal);
+    font-family: 'Roboto', sans-serif; /* Fuente específica para el título principal */
+    color: var(--color-principal); /* Color de marca principal */
+    font-size: 2.6rem; /* Tamaño de fuente grande y prominente, ligeramente reducido */
+    font-weight: 700; /* Negrita para destacar */
+    letter-spacing: -0.02em; /* Ligero ajuste de espaciado entre letras para un look moderno */
+    margin-bottom: 0.75rem; /* Espacio entre el título y el párrafo */
 }
 
+header p {
+    font-size: 1.05rem; /* Tamaño de fuente legible para la descripción */
+    color: var(--color-texto-secundario); /* Color más suave para el texto de apoyo */
+    max-width: 650px; /* Limita el ancho del párrafo para mejor legibilidad */
+    margin: 0.75rem auto 0; /* Centra el párrafo horizontalmente */
+}
+
+/* --- Sección de Entrada del Número --- */
 .input-section {
-    margin-bottom: 2rem;
     text-align: center;
+    background-color: var(--color-blanco);
+    border-radius: 10px; /* Bordes ligeramente menos redondeados para un aspecto más profesional */
+    padding: 2.2rem; /* Un poco más de padding */
+    box-shadow: 0 4px 10px var(--color-sombra); /* Sombra suave para un efecto flotante */
+    border: 1px solid var(--color-borde-claro); /* Borde muy sutil para definición */
+}
+
+.input-section label {
+    display: block; /* La etiqueta ocupa su propia línea */
+    font-size: 1.15rem; /* Tamaño de fuente ligeramente ajustado */
+    font-weight: 500; /* Seminegrita para destacar */
+    margin-bottom: 1.25rem; /* Margen un poco más generoso */
+    color: var(--color-texto);
 }
 
 #numero {
-    padding: 0.75rem;
-    font-size: 1.2rem;
-    width: 50%;
-    max-width: 400px;
-    border: 2px solid var(--color-borde);
-    border-radius: 8px;
+    padding: 1.1rem 1.4rem; /* Relleno generoso para un área de interacción cómoda */
+    font-size: 1.7rem; /* Tamaño de fuente grande para la entrada del número */
+    width: 55%; /* Ancho relativo */
+    max-width: 480px; /* Ancho máximo para evitar que sea demasiado ancho en pantallas grandes */
+    border: 2px solid var(--color-borde); /* Borde inicial para el input */
+    border-radius: 8px; /* Bordes ligeramente menos redondeados */
     text-align: center;
-    font-family: 'Roboto Mono', monospace;
+    font-family: 'Roboto Mono', monospace; /* Fuente monoespaciada para la claridad de los números */
+    font-weight: 700; /* Negrita para los números ingresados */
+    color: var(--color-principal); /* Color de texto más distintivo para el input */
+    background-color: var(--color-fondo-secundario); /* Ligero fondo para el campo de entrada */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave para estados interactivos */
+    appearance: none; /* Elimina los estilos predeterminados del navegador para inputs */
+}
+
+#numero::placeholder {
+    color: var(--color-placeholder); /* Color del texto de ejemplo */
+    font-weight: 400; /* Peso normal para el placeholder */
 }
 
 #numero:focus {
-    outline: none;
-    border-color: var(--color-principal);
+    outline: none; /* Elimina el contorno de foco predeterminado del navegador */
+    border-color: var(--color-principal); /* Borde de color principal al enfocar */
+    box-shadow: 0 0 0 4px var(--color-principal-light); /* Sombra de foco más amigable y sutil */
 }
 
+/* --- Estilos de las Tarjetas de Contenido (Cards) --- */
 .card {
     background-color: var(--color-blanco);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 8px var(--color-sombra);
+    border-radius: 10px; /* Bordes más pronunciados para un aspecto moderno */
+    padding: 2rem;
+    /* Múltiples sombras para una profundidad más rica */
+    box-shadow: 0 4px 10px var(--color-sombra), 0 1px 3px var(--color-sombra);
+    border: 1px solid var(--color-borde-claro); /* Borde sutil para definir la tarjeta */
+    display: flex;
+    flex-direction: column; /* Organiza los elementos de la tarjeta verticalmente */
+    gap: 1.25rem; /* Espacio entre el título, resultado y botón */
 }
 
+.card h2 {
+    font-size: 1.7rem; /* Tamaño de título ligeramente ajustado */
+    color: var(--color-principal); /* Color de marca principal para los títulos de sección */
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 600; /* Seminegrita para un aspecto más formal */
+}
+
+/* --- Cajas de Resultado (Result Box) --- */
 .result-box {
-    background-color: var(--color-fondo);
-    padding: 1rem;
-    border-radius: 6px;
-    margin: 1rem 0;
-    min-height: 40px;
+    background-color: var(--color-fondo-secundario); /* Fondo diferente para los resultados */
+    border: 1px solid var(--color-borde); /* Borde sólido para un aspecto más limpio y profesional (en lugar de punteado) */
+    padding: 1.3rem 1.6rem; /* Relleno generoso */
+    border-radius: 7px; /* Bordes suaves */
+    min-height: 65px; /* Altura mínima para asegurar espacio */
     display: flex;
-    align-items: center;
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.1rem;
-    overflow-x: auto;
+    align-items: center; /* Centra el texto verticalmente */
+    font-family: 'Roboto Mono', monospace; /* Fuente monoespaciada para resultados numéricos/fonéticos */
+    font-size: 1.4rem; /* Texto de resultado más grande y legible */
+    color: var(--color-texto);
+    overflow-x: auto; /* Permite scroll horizontal si el contenido es muy largo */
+    white-space: nowrap; /* Evita que el texto se rompa en varias líneas (excepto en phonetic-box) */
 }
 
 .placeholder-text {
     color: var(--color-placeholder);
     font-style: italic;
+    font-size: 1.2rem; /* Tamaño ligeramente más pequeño que el texto real */
 }
 
+/* --- Botones de Reproducción (Play Button) --- */
 .play-btn {
     background-color: var(--color-principal);
     color: var(--color-blanco);
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    padding: 0.9rem 2rem; /* Relleno ligeramente más generoso */
+    border-radius: 7px; /* Bordes ligeramente menos redondeados */
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
+    font-size: 1.05rem; /* Tamaño de fuente ligeramente ajustado */
+    font-weight: 500;
+    /* Transiciones para efectos suaves en hover/active */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 3px 7px var(--color-sombra); /* Sombra inicial para efecto 3D */
+    display: inline-flex; /* Permite alinear icono y texto */
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem; /* Espacio entre el icono y el texto */
+    margin-top: 0.75rem; /* Margen superior para separación */
 }
 
 .play-btn:hover {
-    background-color: #0056b3;
+    background-color: var(--color-principal-dark); /* Oscurece el botón al pasar el ratón */
+    transform: translateY(-1px); /* Efecto sutil de "levantar" */
+    box-shadow: 0 5px 10px var(--color-sombra-fuerte); /* Sombra más pronunciada en hover */
 }
 
-/* Estilos Modo Fonético */
+.play-btn:active {
+    transform: translateY(0); /* Vuelve a la posición normal al clickear (efecto "presionado") */
+    box-shadow: 0 1px 3px var(--color-sombra); /* Sombra más pequeña para efecto de presión */
+    background-color: var(--color-principal-dark); /* Mantiene el color oscuro */
+}
+
+/* --- Estilos del Modo Fonético --- */
 .phonetic-box {
-    flex-wrap: wrap;
-    gap: 0.5em;
-}
-.palabra-fonetica {
-    padding: 0.2em 0.4em;
-    border-radius: 4px;
-    transition: background-color 0.1s ease-in-out;
-}
-.palabra-fonetica.highlight {
-    background-color: var(--color-highlight);
-    color: var(--color-blanco);
+    flex-wrap: wrap; /* Permite que las palabras se envuelvan a la siguiente línea */
+    gap: 0.7em 0.5em; /* Espacio entre filas y columnas de palabras, ligeramente más generoso */
+    white-space: normal; /* Permite el salto de línea para las palabras (anula result-box) */
 }
 
-/* Estilos Modo Formal (SVG) */
-.svg-box {
-    padding: 0;
-    background: transparent;
+.palabra-fonetica {
+    padding: 0.4em 0.7em; /* Un poco más de padding */
+    border-radius: 5px; /* Bordes ligeramente menos redondeados */
+    background-color: var(--color-fondo-secundario); /* Fondo suave para cada palabra */
+    color: var(--color-texto);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    cursor: default;
+    line-height: 1.2; /* Asegura un espaciado consistente */
+    display: inline-block; /* Para que padding y margin funcionen bien */
 }
+
+.palabra-fonetica.highlight {
+    background-color: var(--color-highlight); /* Color de resaltado distintivo */
+    color: var(--color-blanco); /* Texto blanco para alto contraste */
+    font-weight: 600; /* Hace la palabra resaltada más audaz */
+    transform: scale(1.02); /* Efecto de crecimiento sutil al resaltar, un poco menos pronunciado */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); /* Sombra más sutil y general para el resaltado */
+}
+
+/* --- Estilos del Modo Formal (SVG) --- */
+.svg-box {
+    padding: 0; /* SVG no necesita padding interno */
+    background: transparent; /* El SVG define su propio fondo si es necesario */
+    border: none; /* Elimina el borde de result-box, el SVG es el visual */
+    min-height: auto; /* SVG determina su propia altura */
+    display: flex; /* Centra el SVG si es más pequeño que el contenedor */
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Oculta cualquier cosa que se salga del SVG */
+}
+
 #aprendizaje-formal-wrapper svg {
     width: 100%;
-    height: auto;
+    height: auto; /* Mantiene la relación de aspecto del SVG */
+    display: block; /* Elimina el espacio extra debajo del SVG */
+    border-radius: 8px; /* Bordes redondeados para el área del SVG */
+    background-color: var(--color-blanco); /* Fondo blanco para el SVG */
+    box-shadow: 0 4px 10px var(--color-sombra); /* Sombra para el SVG */
 }
-.svg-numero { font-size: 72px; font-family: 'Roboto Mono', monospace; font-weight: bold; }
-.svg-etiqueta-principal { font-size: 24px; font-family: 'Roboto', sans-serif; fill: var(--color-principal); font-weight: 500; text-anchor: middle; }
-.svg-etiqueta-vertical { font-size: 16px; font-family: 'Roboto', sans-serif; fill: #666; text-anchor: middle; }
 
+/* Estilos específicos para elementos dentro del SVG */
+.svg-numero { 
+    font-size: 68px; /* Ligeramente más pequeño */
+    font-family: 'Roboto Mono', monospace; 
+    font-weight: bold; 
+    fill: var(--color-texto); /* Color de texto general */
+}
+.svg-etiqueta-principal { 
+    font-size: 22px; /* Ligeramente más pequeño */
+    font-family: 'Roboto', sans-serif; 
+    fill: var(--color-principal); 
+    font-weight: 500; 
+    text-anchor: middle; 
+}
+.svg-etiqueta-vertical { 
+    font-size: 15px; /* Ligeramente más pequeño */
+    font-family: 'Roboto', sans-serif; 
+    fill: var(--color-texto-secundario); /* Usa color de texto secundario */
+    text-anchor: middle; 
+}
+
+/* Resaltado para el SVG */
 #svg-entero-texto.highlight, 
 #svg-decimales-g.highlight text,
 #svg-etiquetas-g.highlight text {
