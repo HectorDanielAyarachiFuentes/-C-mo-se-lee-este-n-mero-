@@ -281,3 +281,224 @@ header p {
     transition: fill 0.1s ease-in-out;
     fill: var(--color-highlight) !important;
 }
+
+
+/* ========================================================= */
+/* --- Media Queries para Responsividad --- */
+/* ========================================================= */
+
+/* Para pantallas medianas (tabletas, laptops pequeñas) */
+@media (max-width: 768px) {
+    body {
+        padding: 1.5rem; /* Reduce el padding general */
+    }
+
+    .container {
+        gap: 1.5rem; /* Ajusta el espacio entre secciones */
+    }
+
+    header {
+        margin-bottom: 1.5rem;
+        padding: 1.5rem 0;
+    }
+
+    header h1 {
+        font-size: 2.2rem; /* Reduce el tamaño del título principal */
+    }
+
+    header p {
+        font-size: 1rem; /* Ajusta el tamaño del párrafo */
+        max-width: 500px; /* Adapta el ancho máximo */
+    }
+
+    .input-section {
+        padding: 1.8rem; /* Reduce el padding del input section */
+    }
+
+    .input-section label {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    #numero {
+        padding: 1rem 1.2rem;
+        font-size: 1.5rem; /* Ajusta el tamaño del input */
+        width: 70%; /* Mayor ancho en tabletas para mejor interacción */
+        max-width: 400px; /* Limita el ancho para evitar que sea demasiado grande */
+    }
+
+    .card {
+        padding: 1.7rem; /* Reduce el padding de las tarjetas */
+        gap: 1rem;
+    }
+
+    .card h2 {
+        font-size: 1.5rem; /* Reduce el tamaño de los títulos de tarjeta */
+    }
+
+    .result-box {
+        padding: 1rem 1.2rem;
+        font-size: 1.2rem; /* Ajusta el tamaño del texto de resultado */
+        min-height: 60px;
+    }
+
+    .placeholder-text {
+        font-size: 1.1rem;
+    }
+
+    .play-btn {
+        padding: 0.8rem 1.8rem;
+        font-size: 1rem;
+        gap: 0.5rem;
+    }
+    
+    /* SVG adjustments for tablets */
+    .svg-numero { 
+        font-size: 58px; /* Ajusta el tamaño del número en SVG */
+    }
+    .svg-etiqueta-principal { 
+        font-size: 20px; 
+    }
+    .svg-etiqueta-vertical { 
+        font-size: 14px; 
+    }
+}
+
+/* Para pantallas pequeñas (teléfonos móviles) */
+@media (max-width: 576px) {
+    body {
+        padding: 1rem; /* Padding más pequeño para móviles */
+        font-size: 15px; /* Ligeramente más pequeño en base */
+    }
+
+    .container {
+        gap: 1rem; /* Espacio mínimo entre secciones */
+    }
+
+    header {
+        margin-bottom: 1rem;
+        padding: 1rem 0;
+    }
+
+    header h1 {
+        font-size: 1.8rem; /* Tamaño de título muy reducido para móviles */
+        letter-spacing: 0; /* Elimina letter-spacing para legibilidad en pequeño */
+    }
+
+    header p {
+        font-size: 0.95rem; /* Ajusta el tamaño del párrafo */
+        max-width: 90%; /* Permite que ocupe más ancho en pantallas muy pequeñas */
+    }
+
+    .input-section {
+        padding: 1.2rem; /* Padding reducido para el input section */
+        border-radius: 8px; /* Bordes más sutiles */
+        box-shadow: 0 2px 6px var(--color-sombra); /* Sombra más suave */
+    }
+
+    .input-section label {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    #numero {
+        padding: 0.8rem 1rem;
+        font-size: 1.3rem; /* Tamaño de input ideal para móviles */
+        width: 90%; /* Ocupa casi todo el ancho disponible */
+        border-radius: 6px;
+    }
+
+    #numero:focus {
+        box-shadow: 0 0 0 3px var(--color-principal-light); /* Sombra de foco más compacta */
+    }
+
+    .card {
+        padding: 1.2rem; /* Padding reducido para las tarjetas */
+        border-radius: 8px;
+        box-shadow: 0 2px 6px var(--color-sombra); /* Sombra más suave */
+        gap: 0.8rem;
+    }
+
+    .card h2 {
+        font-size: 1.3rem; /* Títulos más pequeños para tarjetas */
+        margin-bottom: 0.3rem;
+    }
+
+    .result-box {
+        padding: 0.8rem 1rem;
+        font-size: 1.1rem; /* Texto de resultado más compacto */
+        min-height: 50px; /* Altura mínima ajustada */
+        border-radius: 6px;
+    }
+
+    .placeholder-text {
+        font-size: 0.95rem;
+    }
+
+    .play-btn {
+        padding: 0.6rem 1.2rem; /* Padding más pequeño para el botón */
+        font-size: 0.95rem; /* Tamaño de fuente más pequeño para el botón */
+        border-radius: 6px;
+        box-shadow: 0 2px 4px var(--color-sombra); /* Sombra más suave */
+        gap: 0.4rem;
+        margin-top: 0.4rem;
+    }
+
+    .play-btn:hover {
+        transform: translateY(0); /* Desactiva el "levantar" para móviles (menos relevante) */
+        box-shadow: 0 3px 6px var(--color-sombra-fuerte);
+    }
+    
+    .phonetic-box {
+        gap: 0.4em 0.3em; /* Espacio entre palabras más reducido */
+    }
+
+    .palabra-fonetica {
+        padding: 0.25em 0.5em; /* Padding más compacto */
+        border-radius: 4px;
+    }
+
+    /* SVG adjustments for mobile phones */
+    .svg-numero { 
+        font-size: 48px; /* Tamaño de número significativamente reducido */
+    }
+    .svg-etiqueta-principal { 
+        font-size: 16px; 
+    }
+    .svg-etiqueta-vertical { 
+        font-size: 12px; 
+    }
+}
+
+/* Para pantallas extra-pequeñas (iPhone SE, etc.) - opcional pero bueno para la granularidad */
+@media (max-width: 375px) {
+    body {
+        padding: 0.8rem;
+    }
+    header h1 {
+        font-size: 1.6rem;
+    }
+    #numero {
+        font-size: 1.2rem;
+        padding: 0.7rem 0.8rem;
+    }
+    .card h2 {
+        font-size: 1.2rem;
+    }
+    .result-box {
+        font-size: 1rem;
+    }
+    .play-btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+    .svg-numero { 
+        font-size: 38px; 
+    }
+    .svg-etiqueta-principal { 
+        font-size: 14px; 
+    }
+    .svg-etiqueta-vertical { 
+        font-size: 10px; 
+    }
+}
