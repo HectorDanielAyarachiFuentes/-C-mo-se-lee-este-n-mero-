@@ -6,7 +6,6 @@ import { NumberConverter, SpeechService } from './utils.js';
  * Gestiona el modo de aprendizaje formal (con SVG).
  */
 export const FormalMode = {
-    // ... (el código completo de FormalMode va aquí, sin cambios)
     element: null,
     placeholder: '<span class="placeholder-text">Representación gráfica...</span>',
     
@@ -19,28 +18,50 @@ export const FormalMode = {
         this.element.innerHTML = this.placeholder;
     },
 
+    /**
+     * RENDERIZADO DEL SVG MEJORADO
+     * - Coordenadas y viewBox ajustados para un diseño más compacto.
+     * - Uso de text-anchor="middle" para un centrado de texto robusto.
+     * - Lógica de espaciado simplificada.
+     */
     render(pEnteraStr, pDecimalStr) {
         this.element.innerHTML = '';
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.element.appendChild(svg);
 
-        const digitWidth = 55, startX = 20, numY = 200, labelY = 110, fontSize = 72;
+        // --- CONSTANTES DE DISEÑO AJUSTADAS ---
+        const digitWidth = 55;
+        const startX = 40; // Aumentado para dar más espacio a la izquierda
+        const numY = 160; // Subido para reducir espacio vertical
+        const mainLabelY = 100; // Posición Y para la etiqueta principal
+        const verticalLabelY = 80; // Posición Y para etiquetas de decimales
+        const fontSize = 72;
+        const viewBoxHeight = 220; // Altura del viewBox reducida drásticamente
+
         let currentX = startX;
 
-        // "PARTE ENTERA" Label
-        svg.innerHTML += `<text x="${currentX + (pEnteraStr.length * digitWidth / 2) - 30}" y="140" class="svg-etiqueta-principal">PARTE ENTERA</text>`;
+        // --- PARTE ENTERA ---
+        const integerBlockWidth = pEnteraStr.length * digitWidth;
+        const integerBlockCenterX = currentX + (integerBlockWidth / 2);
 
-        // Entero
-        svg.innerHTML += `<rect x="${currentX-5}" y="${numY - fontSize + 10}" width="${pEnteraStr.length * (digitWidth - 15) + 10}" height="${fontSize}" fill="var(--color-fondo)" />`;
-        svg.innerHTML += `<text id="svg-entero-texto" x="${currentX}" y="${numY}" class="svg-numero" style="fill: var(--color-entero)">${pEnteraStr}</text>`;
-        currentX += pEnteraStr.length * (digitWidth-15) + 20;
+        // "PARTE ENTERA" Label - Centrado con text-anchor
+        svg.innerHTML += `<text x="${integerBlockCenterX}" y="${mainLabelY}" class="svg-etiqueta-principal" text-anchor="middle">PARTE ENTERA</text>`;
 
+        // Rectángulo de fondo para la parte entera
+        svg.innerHTML += `<rect x="${currentX - 5}" y="${numY - fontSize + 10}" width="${integerBlockWidth + 10}" height="${fontSize}" fill="var(--color-fondo)" />`;
+        
+        // Número entero (también centrado en su bloque para mejor apariencia)
+        svg.innerHTML += `<text id="svg-entero-texto" x="${integerBlockCenterX}" y="${numY}" class="svg-numero" style="fill: var(--color-entero)" text-anchor="middle">${pEnteraStr}</text>`;
+        
+        currentX += integerBlockWidth + 10; // Actualizamos la posición
+
+        // Coma decimal
         if (pEnteraStr && pDecimalStr) {
-            svg.innerHTML += `<text x="${currentX-5}" y="${numY -10}" class="svg-numero" style="fill: var(--color-coma)">,</text>`;
-            currentX += 20;
+            svg.innerHTML += `<text x="${currentX + 5}" y="${numY - 10}" class="svg-numero" style="fill: var(--color-coma)">,</text>`;
+            currentX += 25;
         }
         
-        // Contenedores para decimales y etiquetas
+        // --- PARTE DECIMAL ---
         const gDecimales = document.createElementNS("http://www.w3.org/2000/svg", "g");
         gDecimales.id = "svg-decimales-g";
         const gEtiquetas = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -50,19 +71,27 @@ export const FormalMode = {
         
         let startDecimalX = currentX;
         const decimalPlaces = NumberConverter._decimalPlaces;
+
         pDecimalStr.split('').forEach((digit, index) => {
-            if (index < decimalPlaces.length-1) {
-                gDecimales.innerHTML += `<rect x="${currentX-5}" y="${numY - fontSize + 10}" width="${digitWidth}" height="${fontSize}" fill="var(--color-fondo)" />`;
-                gDecimales.innerHTML += `<text x="${currentX + 5}" y="${numY}" class="svg-numero" style="fill: var(--color-decimal)">${digit}</text>`;
-                gEtiquetas.innerHTML += `<line x1="${currentX + digitWidth - 5}" y1="50" x2="${currentX + digitWidth - 5}" y2="280" stroke="#ccc" stroke-dasharray="5,5" />`;
-                gEtiquetas.innerHTML += `<text x="${currentX + digitWidth / 2}" y="${labelY}" class="svg-etiqueta-vertical" transform="rotate(-90 ${currentX + digitWidth / 2},${labelY})">${decimalPlaces[index+1].replace("_", "")}</text>`;
+            if (index < decimalPlaces.length - 1) {
+                const digitCenterX = currentX + (digitWidth / 2);
+                
+                // Rectángulo, número y etiquetas
+                gDecimales.innerHTML += `<rect x="${currentX}" y="${numY - fontSize + 10}" width="${digitWidth}" height="${fontSize}" fill="var(--color-fondo)" />`;
+                gDecimales.innerHTML += `<text x="${digitCenterX}" y="${numY}" class="svg-numero" style="fill: var(--color-decimal)" text-anchor="middle">${digit}</text>`;
+                gEtiquetas.innerHTML += `<line x1="${currentX + digitWidth}" y1="40" x2="${currentX + digitWidth}" y2="${viewBoxHeight}" stroke="#ccc" stroke-dasharray="5,5" />`;
+                gEtiquetas.innerHTML += `<text x="${digitCenterX}" y="${verticalLabelY}" class="svg-etiqueta-vertical" transform="rotate(-90 ${digitCenterX},${verticalLabelY})">${decimalPlaces[index + 1].replace("_", "")}</text>`;
+                
                 currentX += digitWidth;
             }
         });
 
-        // Línea vertical principal
-        gEtiquetas.innerHTML += `<line x1="${startDecimalX - 18}" y1="50" x2="${startDecimalX - 18}" y2="280" stroke="var(--color-entero)" stroke-width="3" stroke-dasharray="8,4" />`;
-        svg.setAttribute('viewBox', `0 0 ${currentX + 20} 300`);
+        // Línea vertical principal que separa entero de decimal
+        gEtiquetas.innerHTML += `<line x1="${startDecimalX - 10}" y1="40" x2="${startDecimalX - 10}" y2="${viewBoxHeight}" stroke="var(--color-entero)" stroke-width="3" stroke-dasharray="8,4" />`;
+        
+        // --- VIEWBOX FINAL ---
+        // Se ajusta dinámicamente al ancho y usa la altura compacta
+        svg.setAttribute('viewBox', `0 0 ${currentX + 20} ${viewBoxHeight}`);
     },
 
     play({ fullText, integerText, decimalText, unitText }) {
@@ -73,6 +102,8 @@ export const FormalMode = {
         const etiquetaSVG = document.getElementById('svg-etiquetas-g');
 
         const onBoundary = (e) => {
+            if (e.name !== 'word') return;
+
             const currentText = fullText.substring(0, e.charIndex + e.charLength);
             [enteroSVG, decimalSVG, etiquetaSVG].forEach(el => el && el.classList.remove('highlight'));
             if(decimalSVG) Array.from(decimalSVG.children).forEach(el => el.classList.remove('highlight'));
@@ -84,7 +115,6 @@ export const FormalMode = {
                 decimalSVG.querySelectorAll('text').forEach(el => el.classList.add('highlight'));
             }
             if (etiquetaSVG && unitText && currentText.includes(unitText)) {
-                // Des-resaltar los números decimales cuando la unidad se está leyendo
                 decimalSVG.querySelectorAll('text').forEach(el => el.classList.remove('highlight'));
                 etiquetaSVG.classList.add('highlight');
             }
